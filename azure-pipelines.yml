@@ -1,18 +1,16 @@
-# Execute manually for exploration purposes
+# We plan to execute manually for tutorial purposes
 # This particular pipeline should not be run behind GitHub events such as push or PR
 trigger: none
 # for production projects, the recommended trigger is peridical, once a week
-# Ideally, this pipeline should run behind a notification that a new pertinent fix is available
-# Follow https://webmethods.ideas.aha.io/ideas/OT-I-21 if this aspect is important for your context
 
-# This is a Sunday at 1 AM schedule
+# It is recommended to run this pipleine periodically. This is a Sunday at noon schedule
 schedules:
-- cron: "0 1 * * 0"
-  displayName: Weekly Sunday build
+- cron: "0 12 * * 1"
+  displayName: Weekly Monday build
   branches:
     include:
     - main
-  always: true # i.e. trigger even if there are no changes in the repo, necessary in our case
+  always: true
 
 pool:
   name: WmDevOpsTutorialAgentsPool
@@ -31,25 +29,6 @@ steps:
     ./01.getSUIF.sh
   displayName: 'Get SUIF'
 
-# get SA share secrets
-- task: DownloadSecureFile@1
-  name: SASecureInfo
-  displayName: 'Download secure information for images share'
-  inputs:
-    secureFile: 'sa.share.secrets.sh'
-
-# mount SA share
-- script: ./02.mountImagesShare.sh
-  displayName: 'Mount images share'
-
-# update ubuntu machine
-- script: ./03.prepareAgentMachine.sh
-  displayName: 'System software preparation'
-
-# assure installation binaries
-- script: ./04.assureInstallBinaries.sh
-  displayName: 'Assure installation binaries'
-
 # get SDC Credentials
 - task: DownloadSecureFile@1
   name: SDCCredentials
@@ -57,8 +36,31 @@ steps:
   inputs:
     secureFile: 'sdc.credentials.sh'
 
+# get SA share secrets
+- task: DownloadSecureFile@1
+  name: SASecureInfo
+  displayName: 'Download secure information for images share'
+  inputs:
+    secureFile: 'sa.share.secrets.sh'
+
+# check credentials
+- script: ./02.checkEmpowerCredentials.sh
+  displayName: 'Check Empower Credentials'
+
+# mount SA share
+- script: ./03.mountImagesShare.sh
+  displayName: 'Mount images share'
+
+# update ubuntu machine
+- script: ./04.prepareAgentMachine.sh
+  displayName: 'System software preparation'
+
+# assure installation binaries
+- script: ./05.assureInstallBinaries.sh
+  displayName: 'Assure installation binaries'
+
 # Boostrap Update Manager
-- script: ./05.installSUM.sh
+- script: ./06.installSUM.sh
   displayName: 'Install SUM'
 
 # Build Images
@@ -66,12 +68,14 @@ steps:
     export MY_SUIF_TAG="$(MY_SUIF_TAG)"
     export MY_templates="$(MY_templates)"
     export SUIF_DEBUG_ON="$(SUIF_DEBUG_ON)"
-    ./06.buildSagImages.sh
+    ./07.buildSagImages.sh
   displayName: 'Build Images'
 
+###### Our future pipeline
+
 # Save audit on share 
-# HINT: you might use this step only for debug purposes
-# HINT: without this step the mount may be done in readonly mode
+# HINT: ou should use this step only for debug purposes
+# HINT: without this step the mount may be readonly
 - script: ./11.saveAudit.sh
   displayName: 'Save Audit on Share'
   condition: always()

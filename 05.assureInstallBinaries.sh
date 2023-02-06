@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+
+# shellcheck source=/dev/null
+# shellcheck disable=SC2154
 
 . ./setEnv.sh
 . "${SUIF_CACHE_HOME}/01.scripts/commonFunctions.sh"
@@ -7,7 +10,7 @@
 mkdir -p "${MY_binDir}"
 
 if [ -f "${MY_installerSharedBin}" ]; then
-  logI "Copying installer binary from the share"
+  logI "Copying installer binary from the given share"
   cp "${MY_installerSharedBin}" "${SUIF_INSTALL_INSTALLER_BIN}"
   logI "Installer binary copied"
 else
@@ -19,7 +22,7 @@ else
 fi
 
 if [ -f "${MY_sumBootstrapSharedBin}" ]; then
-  logI "Copying sum bootstrap binary from the share"
+  logI "Copying sum bootstrap binary from the given share"
   cp "${MY_sumBootstrapSharedBin}" "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}"
   logI "SUM bootstrap binary copied"
 else

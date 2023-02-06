@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+
+# shellcheck source=/dev/null
 
 . ./setEnv.sh
 
