@@ -19,8 +19,12 @@ pool:
 variables:
   - group: ProductImageBuild.Options
 
+# Note update may take a bit of time, launching int pre-emptively at first touch to save some time.
+# Later, full updates and installations are done in a dedicated step
 steps:
-- script: chmod u+x ./*.sh
+- script: |
+    nohup sudo apt-get -y update & 
+    chmod u+x ./*.sh
   displayName: "Grant shell execution permissions"
 
 # get SUIF
