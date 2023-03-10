@@ -12,4 +12,4 @@ chmod u+x "${SDCCREDENTIALS_SECUREFILEPATH}"
 
 logI "Installing Update Manager..."
 mkdir -p "${SUIF_SUM_HOME}"
-bootstrapSum "${SUIF_PATCH_SUM_BOOSTSTRAP_BIN}" "" "${SUIF_SUM_HOME}"
+bootstrapSum "${SUIF_PATCH_SUM_BOOTSTRAP_BIN}" "" "${SUIF_SUM_HOME}"
