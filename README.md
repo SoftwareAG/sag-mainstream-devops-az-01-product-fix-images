@@ -1,4 +1,6 @@
-# Software AG Mainstream DevOps - Product and Fix Zip Images Creation
+# MOVING Software AG Mainstream DevOps - Product and Fix Zip Images Creation
+
+# This repo will be moved away from the Software AG organization
 
 ## Quick Start
 
